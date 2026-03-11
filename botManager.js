@@ -350,7 +350,7 @@ export function getHistory(id, maxMessages = 0) {
     }
   }
 
-  // Trim to the most recent messages if a limit is set
+  // Retain only the most recent N messages when a limit is configured
   if (maxMessages > 0 && combinedHistory.length > maxMessages) {
     combinedHistory = combinedHistory.slice(-maxMessages);
   }
