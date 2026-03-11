@@ -267,9 +267,10 @@ async function toggleChannelChatHistory(interaction) {
   const channelId = interaction.channelId;
   const enabled = interaction.options.getBoolean('enabled');
   const instructions = interaction.options.getString('instructions') || DEFAULT_PERSONALITY;
+  const maxMessages = interaction.options.getInteger('max_messages') || 0;
 
   if (enabled) {
-    state.channelWideChatHistory[channelId] = true;
+    state.channelWideChatHistory[channelId] = maxMessages > 0 ? maxMessages : true;
     state.customInstructions[channelId] = instructions;
   } else {
     delete state.channelWideChatHistory[channelId];
@@ -279,11 +280,15 @@ async function toggleChannelChatHistory(interaction) {
 
   await persistStateChange();
 
+  const maxMessagesInfo = enabled && maxMessages > 0
+    ? `\nMax context messages: \`${maxMessages}\``
+    : '';
+
   return replyWithEmbed(interaction, {
     color: enabled ? 0x00FF00 : 0xFFA500,
     title: enabled ? 'Channel History Enabled' : 'Channel History Disabled',
     description: enabled
-      ? 'Channel-wide chat history has been enabled.'
+      ? `Channel-wide chat history has been enabled.${maxMessagesInfo}`
       : 'Channel-wide chat history has been disabled.',
     flags: undefined,
   });

@@ -339,7 +339,7 @@ export async function initialize() {
 
 // --- State Helper Functions ---
 
-export function getHistory(id) {
+export function getHistory(id, maxMessages = 0) {
   const historyObject = chatHistories[id] || {};
   let combinedHistory = [];
 
@@ -348,6 +348,11 @@ export function getHistory(id) {
     if (Object.hasOwn(historyObject, messagesId)) {
       combinedHistory = [...combinedHistory, ...messageHistory];
     }
+  }
+
+  // Trim to the most recent messages if a limit is set
+  if (maxMessages > 0 && combinedHistory.length > maxMessages) {
+    combinedHistory = combinedHistory.slice(-maxMessages);
   }
 
   // Transform to format expected by new Google GenAI API
