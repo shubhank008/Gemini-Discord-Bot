@@ -24,6 +24,7 @@ import {
   buildGeminiToolsFromPreferences,
   GENERATION_CONFIG,
   MAX_GENERATION_ATTEMPTS,
+  MAX_HISTORY_SIZE,
   MESSAGE_TYPING_INTERVAL_MS,
   MESSAGE_TYPING_TIMEOUT_MS,
   MODEL,
@@ -89,6 +90,17 @@ function resolveHistoryId(message) {
   return isServerHistoryEnabled ? guildId : channelId;
 }
 
+function resolveMaxHistorySize(message) {
+  const channelId = message.channel.id;
+  const channelValue = state.channelWideChatHistory[channelId];
+
+  if (typeof channelValue === 'number' && channelValue > 0) {
+    return channelValue;
+  }
+
+  return MAX_HISTORY_SIZE;
+}
+
 function createChatSession(message) {
   const instructions = buildConversationContext(message, resolveInstructions(message));
   const selectedTools = buildGeminiToolsFromPreferences(getUserGeminiToolPreferences(message.author.id));
@@ -108,7 +120,7 @@ function createChatSession(message) {
   return genAI.chats.create({
     model: MODEL,
     config: chatConfig,
-    history: getHistory(resolveHistoryId(message)),
+    history: getHistory(resolveHistoryId(message), resolveMaxHistorySize(message)),
   });
 }
 

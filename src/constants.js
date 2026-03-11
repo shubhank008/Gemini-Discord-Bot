@@ -24,6 +24,7 @@ export const DEFAULT_SERVER_SETTINGS = Object.freeze({
 export const WORK_IN_DMS = config.workInDMs;
 export const DISPLAY_PERSONALITY_BUTTONS = config.shouldDisplayPersonalityButtons;
 export const SEND_RETRY_ERRORS_TO_DISCORD = config.SEND_RETRY_ERRORS_TO_DISCORD;
+export const MAX_HISTORY_SIZE = config.maxHistorySize;
 
 export const DEFAULT_GEMINI_TOOL_PREFERENCES = Object.freeze({
   ...config.defaultGeminiToolPreferences,

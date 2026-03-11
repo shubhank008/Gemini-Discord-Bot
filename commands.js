@@ -38,5 +38,12 @@ export const commands = Object.freeze([
     )
     .addStringOption((option) =>
       option.setName('instructions').setDescription('Bot instructions for that channel.').setRequired(false),
+    )
+    .addIntegerOption((option) =>
+      option
+        .setName('max_messages')
+        .setDescription('Max number of recent messages to use as context (0 = use global default).')
+        .setRequired(false)
+        .setMinValue(0),
     ),
 ]);
